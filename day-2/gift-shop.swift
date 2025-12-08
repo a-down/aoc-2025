@@ -44,6 +44,7 @@ func getInvalidIdsValueFromRange(range: (Int, Int)) -> Int {
   let allIdsInRange = Array(range.0...range.1)
   var valueOfInvalidIds = 0
 
+  // Part 1
   for id in allIdsInRange {
     let splitId = String(id).split(separator: "")
     let halfLength = splitId.count / 2
@@ -55,6 +56,32 @@ func getInvalidIdsValueFromRange(range: (Int, Int)) -> Int {
     }
   }
 
+  // Part 2
+  // for id in allIdsInRange {
+  //   // let halfLength = String(id).count / 2
+
+  //   for chunkLength in 1...String(id).count {
+  //     // TODO: check if fully divisible by chunkLength
+  //     var splitId = String(id).split(separator: "")
+  //     var chunks: [String] = []
+  //     for _ in stride(from: 0, to: splitId.count, by: chunkLength) {
+  //       let chunk = splitId[0..<chunkLength].joined()
+  //       chunks.append(chunk)
+  //       for _ in 0..<chunkLength {
+  //         print(splitId)
+  //         splitId.remove(at: 0)
+  //       }
+  //       print("chunks", chunks, splitId)
+  //     }
+  //     let chunksSet = Set(chunks)
+  //     if (chunks.count != chunksSet.count) && chunksSet.count == 1 {
+  //       print("Chunks", chunks)
+  //       print("ChunksSet", chunksSet)
+  //       break
+  //     }
+  //   }
+  // }
+
   return valueOfInvalidIds
 }
 
@@ -62,7 +89,7 @@ func getGiftShopInvalidIdSum() {
   var sum = 0
   let ranges = getRangesFromFile()
   for range in ranges {
-    let rangeValue = getInvalidIdsValueFromRange(range: range)
+    let rangeValue = getInvalidIdsValueFromRange(range: (222220, 222222))
     sum = sum + rangeValue
   }
   print(sum)

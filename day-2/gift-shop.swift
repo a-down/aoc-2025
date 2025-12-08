@@ -44,8 +44,6 @@ func getInvalidIdsValueFromRange(range: (Int, Int)) -> Int {
   let allIdsInRange = Array(range.0...range.1)
   var valueOfInvalidIds = 0
 
-  print(range)
-
   for id in allIdsInRange {
     let splitId = String(id).split(separator: "")
     let halfLength = splitId.count / 2

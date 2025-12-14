@@ -1,12 +1,21 @@
 import Foundation
 
-let arguments = CommandLine.arguments.dropFirst()  // Drop the executable path
+var arguments = CommandLine.arguments.dropFirst()  // Drop the executable path
 
 var isTest = false
 if let firstArg = arguments.first {
   if firstArg == "true" {
     print("\nIS TEST\n")
-    isTest = true
+    isTest.toggle()
+    arguments = arguments.dropFirst()
+  }
+}
+
+var isPartTwo = false
+if let secondArg = arguments.first {
+  if secondArg == "true" {
+    print("\nIS PART TWO\n")
+    isPartTwo.toggle()
   }
 }
 
@@ -37,14 +46,22 @@ func getPaperRows() -> [[Bool]] {
 }
 
 func findAccessibleRollsCount() -> Int {
+  var rows = getPaperRows()
   var count = 0
-  let rows = getPaperRows()
+  var hasRemainingPositions = true
 
-  for (rowIdx, row) in rows.enumerated() {
-    for (colIdx, pos) in row.enumerated() {
-      if pos {
-        if getIsPositionAccessible(rows: rows, rowIdx: rowIdx, colIdx: colIdx) {
-          count += 1
+  while hasRemainingPositions {
+    hasRemainingPositions = false
+    for (rowIdx, row) in rows.enumerated() {
+      for (colIdx, pos) in row.enumerated() {
+        if pos {
+          if getIsPositionAccessible(rows: rows, rowIdx: rowIdx, colIdx: colIdx) {
+            count += 1
+            if isPartTwo {
+              rows[rowIdx][colIdx] = false
+              hasRemainingPositions = true
+            }
+          }
         }
       }
     }

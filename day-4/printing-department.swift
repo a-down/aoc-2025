@@ -3,19 +3,16 @@ import Foundation
 var arguments = CommandLine.arguments.dropFirst()  // Drop the executable path
 
 var isTest = false
-if let firstArg = arguments.first {
-  if firstArg == "true" {
-    print("\nIS TEST\n")
-    isTest.toggle()
-    arguments = arguments.dropFirst()
-  }
-}
-
 var isPartTwo = false
-if let secondArg = arguments.first {
-  if secondArg == "true" {
-    print("\nIS PART TWO\n")
-    isPartTwo.toggle()
+
+for argument in CommandLine.arguments {
+  switch argument {
+    case "--test":
+      isTest.toggle()
+    case "--two":
+      isPartTwo.toggle()
+    default:
+      break
   }
 }
 

@@ -55,45 +55,33 @@ func findAccessibleRollsCount() -> Int {
 
 func getIsPositionAccessible(rows: [[Bool]], rowIdx: Int, colIdx: Int) -> Bool {
   var openAdjacentPositionsCount = 0
-  // TODO: Could move to args for performance
   let isFirstRow = rowIdx == 0
   let isLastRow = rowIdx == rows.count - 1
   let isFirstCol = colIdx == 0
   let isLastCol = colIdx == rows[0].count - 1
 
-  // TODO: Yuck
+  let cellsToCheck: [(isNotExistent: Bool, Int, Int)] = [
+    (isFirstRow || isFirstCol, rowIdx - 1, colIdx - 1),
+    (isFirstRow, rowIdx - 1, colIdx),
+    (isFirstRow || isLastCol, rowIdx - 1, colIdx + 1),
+    (isFirstCol, rowIdx, colIdx - 1),
+    (isLastCol, rowIdx, colIdx + 1),
+    (isLastRow || isFirstCol, rowIdx + 1, colIdx - 1),
+    (isLastRow, rowIdx + 1, colIdx),
+    (isLastRow || isLastCol, rowIdx + 1, colIdx + 1),
+  ]
 
-  // top left
-  if isFirstRow || isFirstCol || rows[rowIdx - 1][colIdx - 1] == false {
-    openAdjacentPositionsCount += 1
-  }
-  // top center
-  if isFirstRow || rows[rowIdx - 1][colIdx] == false {
-    openAdjacentPositionsCount += 1
-  }
-  // top right
-  if isFirstRow || isLastCol || rows[rowIdx - 1][colIdx + 1] == false {
-    openAdjacentPositionsCount += 1
-  }
-  // left
-  if isFirstCol || rows[rowIdx][colIdx - 1] == false {
-    openAdjacentPositionsCount += 1
-  }
-  // right
-  if isLastCol || rows[rowIdx][colIdx + 1] == false {
-    openAdjacentPositionsCount += 1
-  }
-  // bottom left
-  if isLastRow || isFirstCol || rows[rowIdx + 1][colIdx - 1] == false {
-    openAdjacentPositionsCount += 1
-  }
-  // top center
-  if isLastRow || rows[rowIdx + 1][colIdx] == false {
-    openAdjacentPositionsCount += 1
-  }
-  // top right
-  if isLastRow || isLastCol || rows[rowIdx + 1][colIdx + 1] == false {
-    openAdjacentPositionsCount += 1
+  for cell in cellsToCheck {
+    if cell.isNotExistent {
+      openAdjacentPositionsCount += 1
+      continue
+    }
+    if !rows[cell.1][cell.2] {
+      openAdjacentPositionsCount += 1
+    }
+    if openAdjacentPositionsCount > 4 {
+      break
+    }
   }
 
   return openAdjacentPositionsCount > 4

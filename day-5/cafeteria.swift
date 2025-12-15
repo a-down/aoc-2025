@@ -8,9 +8,6 @@ for argument in CommandLine.arguments {
   case "--test":
     print("IS TEST")
     isTest.toggle()
-  case "--two":
-    print("→ IS PART TWO")
-    isPartTwo.toggle()
   default:
     break
   }
@@ -58,8 +55,11 @@ func getFreshIngredientCount() {
   var count = 0
   let data = getDbData()
 
+  var allRanges: [ClosedRange<Int>] = []
+
   for ingredient in data.ingredients {
     for range in data.ranges {
+      allRanges.append(range.0...range.1)
       if (range.0...range.1).contains(ingredient) {
         count += 1
         break
@@ -67,7 +67,35 @@ func getFreshIngredientCount() {
     }
   }
 
-  print("Count: \(count)")
+  let combinedRanges = getCombinedRanges(intervals: allRanges)
+  var combinedCount = 0
+  for comb in combinedRanges {
+    combinedCount += comb.count
+  }
+
+  print("Part One: \(count)")
+  print("Part Two: \(combinedCount)")
+}
+
+func getCombinedRanges(intervals: [ClosedRange<Int>]) -> [ClosedRange<Int>] {
+  var combined = [ClosedRange<Int>]()
+  let sortedIntervals = intervals.sorted { $0.lowerBound < $1.lowerBound }
+
+  guard var accumulator = sortedIntervals.first else { return [] }
+
+  for interval in sortedIntervals.dropFirst() {
+    if accumulator.upperBound >= interval.lowerBound
+      || accumulator.upperBound == interval.lowerBound - 1
+    {
+      accumulator = accumulator.lowerBound...max(accumulator.upperBound, interval.upperBound)
+    } else {
+      combined.append(accumulator)
+      accumulator = interval
+    }
+  }
+  combined.append(accumulator)
+
+  return combined
 }
 
 getFreshIngredientCount()

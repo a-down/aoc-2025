@@ -1,7 +1,6 @@
 import Foundation
 
 var isTest = false
-var isPartTwo = false
 
 for argument in CommandLine.arguments {
   switch argument {
@@ -40,7 +39,8 @@ func getLinesAsArrays() -> [[String.SubSequence]] {
 
 func getSumOfWorksheet() {
   let lines = getLinesAsArrays()
-  var count = 0
+  var humanCount = 0
+  var cephCount = 0
 
   for idx in 0..<lines[0].count {
     let lastLine = lines.last
@@ -49,28 +49,45 @@ func getSumOfWorksheet() {
       method = String(unwrappedLastLine[idx])
     }
 
-    var lineVal = 0
+    var humanColVal = 0
+    var cephColVal = 0
 
     for (lineIdx, line) in lines.dropLast().enumerated() {
       let int = Int(line[idx])
       if let unwrappedInt = int {
         if lineIdx == 0 {
-          lineVal = Int(unwrappedInt)
+          humanColVal = Int(unwrappedInt)
           continue
         }
         if method == "*" {
-          lineVal = lineVal * unwrappedInt
+          humanColVal = humanColVal * unwrappedInt
         } else if method == "+" {
-          lineVal = lineVal + unwrappedInt
+          humanColVal = humanColVal + unwrappedInt
         }
       }
     }
 
-    count += lineVal
-    print("Line Value: \(lineVal)")
+    var allColNumbers: [String.SubSequence] = []
+    for line in lines.dropLast() {
+      allColNumbers.append(line[idx])
+    }
+
+    let longestColNumber = allColNumbers.max(by: { $0.count > $1.count })?.count
+    if let unwrapped = longestColNumber {
+        var vertNum: [String] = []
+      for numIdx in 0...unwrapped {
+        vertNum.append()
+      }
+    }
+
+    humanCount += humanColVal
+
+    print("Human Column Value: \(humanColVal)")
+    print("Cephalopod Column Value: \(cephColVal)")
   }
 
-  print("Worksheet Value: \(count)")
+  print("Human Worksheet Value: \(humanCount)")
+  print("Cephalopod Worksheet Value: \(cephCount)")
 }
 
 getSumOfWorksheet()
